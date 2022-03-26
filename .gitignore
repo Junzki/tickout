@@ -45,6 +45,11 @@ CTestTestfile.cmake
 _deps
 CMakeSettings.json
 
+# Python
+venv/
+__pycache__/
+*.pyc
+
 # macOS
 .DS_Store
 
