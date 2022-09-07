@@ -1,0 +1,5 @@
+-r flomo/requirements.txt
+
+click
+python-dotenv
+PyYAML
