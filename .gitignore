@@ -122,3 +122,5 @@ settings/settings_local.py
 # Generated files
 *.xlsx
 output/
+!etc/config.sample.yaml
+etc/*

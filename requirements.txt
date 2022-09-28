@@ -1,5 +1,6 @@
 -r flomo/requirements.txt
 
 click
+imapclient
 python-dotenv
 PyYAML

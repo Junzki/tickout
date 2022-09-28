@@ -1,0 +1,7 @@
+flomo_sdk: 'flomo'
+flomo_api_key: ''
+
+# Mail
+imap_server: ''
+imap_user: ''
+imap_password: ''
