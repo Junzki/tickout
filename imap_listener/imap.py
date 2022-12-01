@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
 import email
-import typing
+import typing as ty
 
+from email.header import decode_header
+from email.generator import Generator
 from imapclient import IMAPClient
 from tickout.settings import settings
+from tickout.log import LOG
+from .dispatcher import dispatch
 
 
 class IMAPDiscoverer(object):
@@ -15,7 +19,7 @@ class IMAPDiscoverer(object):
         self.password = settings.IMAP_PASSWORD
         self.inbox = settings.IMAP_MAILBOX
 
-        self._client: typing.Optional[IMAPClient] = None
+        self._client: ty.Optional[IMAPClient] = None
 
     @property
     def client(self):
@@ -33,7 +37,23 @@ class IMAPDiscoverer(object):
 
     def discover(self):
         messages = self.client.search("UNSEEN")
+        discovered = list()
 
         for uid, message_data in self.client.fetch(messages, "RFC822").items():
-            email_message = email.message_from_bytes(message_data[b"RFC822"])
-            print(uid, email_message.get("From"), email_message.get("Subject"))
+            message = email.message_from_bytes(message_data[b"RFC822"])
+            sender = message.get("From")
+            subject = decode_header(message.get('Subject'))
+            LOG.info("Received from %(sender)s: %(subject)s", dict(sender=sender, subject=subject))
+
+            parser_klass = dispatch(message)
+            if not parser_klass:
+                continue
+
+            parser = parser_klass()
+            result = parser.parse(message)
+            if not result:
+                continue
+
+            print(uid, result.values())
+
+        return discovered
