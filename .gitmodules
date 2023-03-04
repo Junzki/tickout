@@ -1,3 +1,6 @@
 [submodule "flomo"]
 	path = flomo
 	url = git@github.com:Junzki/flomo.git
+[submodule "ticktick-py"]
+	path = ticktick-py
+	url = git@github.com:Junzki/ticktick-py.git
